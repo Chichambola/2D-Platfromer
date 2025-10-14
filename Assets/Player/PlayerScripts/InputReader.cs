@@ -6,7 +6,6 @@ using UnityEngine;
 public class InputReader : MonoBehaviour
 {
     public const string Horizontal = nameof(Horizontal);
-    public const string IsJump = nameof(IsJump);
     private bool _isJump;
 
     public float Direction { get; private set; }
@@ -16,7 +15,9 @@ public class InputReader : MonoBehaviour
     private void Update()
     {
         Direction = Input.GetAxis(Horizontal);
-
+        
+        Debug.Log(Direction);
+        
         if(Input.GetKeyDown(KeyCode.W))
         { 
             _isJump = true;

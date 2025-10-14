@@ -6,7 +6,6 @@ using UnityEngine;
 public class Mover : MonoBehaviour
 {
     public const string Speed = nameof(Speed);
-    public const string IsJump = nameof(IsJump);
 
     [SerializeField] private float _moveSpeed;
     [SerializeField] private float _jumpForce;
@@ -27,8 +26,8 @@ public class Mover : MonoBehaviour
 
     public void Move(float direction)
     {
-        _rigidbody.velocity = new Vector2(_moveSpeed * direction * Time.fixedDeltaTime, _rigidbody.velocity.y);
-
+        _rigidbody.velocity = new Vector2(_moveSpeed * direction * Time.deltaTime, _rigidbody.velocity.y);
+        
         _animator.SetFloat(Speed, direction);
     }
 }

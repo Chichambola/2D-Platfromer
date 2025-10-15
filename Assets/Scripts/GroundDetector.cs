@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class GroundDetector : MonoBehaviour
 {
-    public bool IsGround { get; private set; }
+    private int _groundCounter;
+    public bool IsGround => _groundCounter > 0;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent(out Ground _))
-            IsGround = true;
+            _groundCounter++;
     }
 
     private void OnCollisionExit2D(Collision2D collision)
     {
         if (collision.gameObject.TryGetComponent(out Ground _))
-            IsGround = false;
+            _groundCounter--;
     }
 }

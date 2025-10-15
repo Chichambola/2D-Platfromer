@@ -16,8 +16,6 @@ public class InputReader : MonoBehaviour
     {
         Direction = Input.GetAxis(Horizontal);
         
-        Debug.Log(Direction);
-        
         if(Input.GetKeyDown(KeyCode.W))
         { 
             _isJump = true;

@@ -12,6 +12,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private int _poolCapacity;
     [SerializeField] private int _poolMaxCapacity = 5;
     [SerializeField] private List<SpawnPoint> _spawnPoints;
+    [SerializeField] private Collector _coinCollector;
 
     private ObjectPool<Coin> _pool;
 
@@ -38,7 +39,7 @@ public class Spawner : MonoBehaviour
     {
         coin.gameObject.SetActive(false);
 
-        coin.CoinCollected -= Release;
+        _coinCollector.CoinCollected -= Release;
     }
 
     private void Release(Coin coin)
@@ -76,6 +77,6 @@ public class Spawner : MonoBehaviour
         
         coin.gameObject.SetActive(true);
 
-        coin.CoinCollected += Release;
+        _coinCollector.CoinCollected += Release;
     }
 }

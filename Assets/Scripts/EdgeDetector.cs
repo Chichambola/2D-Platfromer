@@ -6,15 +6,15 @@ using UnityEngine.UIElements;
 
 public class EdgeDetector : MonoBehaviour
 {
-    private float _distanceToCheckEdge = 2f;
+    private float _distanceToCheck = 3f;
 
     public event Action OffEdgeDetected;
 
     private void FixedUpdate()
     {
-        RaycastHit2D hit = Physics2D.Raycast(gameObject.transform.position, Vector2.down, _distanceToCheckEdge);
+        RaycastHit2D hitDownwards = Physics2D.Raycast(gameObject.transform.position, Vector2.down, _distanceToCheck);
 
-        if (hit.collider == null)
+        if (hitDownwards.collider == null)
         {
             OffEdgeDetected?.Invoke();
         }

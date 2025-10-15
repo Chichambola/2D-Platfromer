@@ -17,10 +17,8 @@ public class JumpController : MonoBehaviour
 
     public void Jump()
     {
-        /*float verticalVelocity = Physics2D.gravity.x * Time.deltaTime;
-        
-        _rigidbody.velocity.Set(verticalVelocity, _rigidbody.velocity.y);
-        
-        _rigidbody.AddForce(new Vector2(0, _jumpForce));*/
+        _rigidbody.velocity.Set(0, _rigidbody.velocity.y);
+
+        _rigidbody.AddForce(new Vector2(0, _jumpForce));
     }
 }

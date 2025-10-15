@@ -8,6 +8,7 @@ using UnityEngine;
 [RequireComponent(typeof(JumpController))]
 [RequireComponent(typeof(GroundDetector))]
 [RequireComponent(typeof(InputReader))]
+[RequireComponent(typeof(AnimationController))]
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private MoveController _moveController;
     [SerializeField] private Rotator _rotator;
     [SerializeField] private JumpController _jumpController;
+    [SerializeField] private AnimationController _animationController;
 
     private void Awake()
     {
@@ -24,16 +26,18 @@ public class Player : MonoBehaviour
         _moveController = GetComponent<MoveController>();
         _jumpController = GetComponent<JumpController>();
         _rotator = GetComponent<Rotator>();
+        _animationController = GetComponent<AnimationController>();
     }
 
     private void FixedUpdate()
     {
         if (_inputReader.Direction != 0)
         {
+            _animationController.PlayRunAnimation(_inputReader.Direction);
             _moveController.Move(_inputReader.Direction);
             _rotator.Flip(_inputReader.Direction);
         }
-        
+
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
     }

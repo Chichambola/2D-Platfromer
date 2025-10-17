@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(MoveController))]
@@ -10,17 +11,21 @@ using UnityEngine;
 [RequireComponent(typeof(InputReader))]
 [RequireComponent(typeof(AnimationController))]
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IAttacker
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GroundDetector _groundDetector;
-    [SerializeField] private MoveController _moveController;
     [SerializeField] private Rotator _rotator;
+    [SerializeField] private MoveController _moveController;
     [SerializeField] private JumpController _jumpController;
     [SerializeField] private AnimationController _animationController;
+    [SerializeField] private Collector _collector;
 
-    private float _health = 100f;
-    
+    [SerializeField] private float _health = 100f;
+    [SerializeField] private float _damage = 10f;
+
+    private float _maxHealth;
+
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();
@@ -29,6 +34,21 @@ public class Player : MonoBehaviour
         _jumpController = GetComponent<JumpController>();
         _rotator = GetComponent<Rotator>();
         _animationController = GetComponent<AnimationController>();
+    }
+
+    private void Start()
+    {
+        _maxHealth = _health;
+    }
+
+    private void OnEnable()
+    {
+        _collector.ItemCollected += TryGetHeal;
+    }
+
+    private void OnDisable()
+    {
+        _collector.ItemCollected -= TryGetHeal;
     }
 
     private void FixedUpdate()
@@ -42,5 +62,43 @@ public class Player : MonoBehaviour
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
+    }
+
+    private void TryGetHeal(Item item)
+    {
+        if(item.TryGetComponent(out Medkit medkit))
+        {
+            _health += medkit.Heal();
+
+            if (_health > _maxHealth)
+                _health = _maxHealth;
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _health -= damage;
+
+        Debug.Log($"{gameObject.name} υο - {_health}");
+
+        Die();
+    }
+
+    public void DealDamage(IAttacker defender)
+    {
+        defender.TakeDamage(_damage);
+    }
+
+    public void Die()
+    {
+        if (_health <= 0)
+        {
+            Destroy(this);
+        }
+    }
+
+    public void PushFromEnemy()
+    {
+        _moveController.Push();
     }
 }

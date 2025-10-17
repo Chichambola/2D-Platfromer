@@ -7,21 +7,23 @@ using Random = UnityEngine.Random;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private Coin _coinPrefab;
+    [SerializeField] private Item _prefab;
+
     [SerializeField] private float _spawnDelay = 1.5f;
     [SerializeField] private int _poolCapacity;
     [SerializeField] private int _poolMaxCapacity = 5;
-    [SerializeField] private List<SpawnPoint> _spawnPoints;
-    [SerializeField] private Collector _coinCollector;
 
-    private ObjectPool<Coin> _pool;
+    [SerializeField] private List<SpawnPoint> _spawnPoints;
+    [SerializeField] private Collector _collector;
 
     private Coroutine _coroutine;
-    
+
+    private ObjectPool<Item> _pool;
+
     private void Awake()
     {
-        _pool = new ObjectPool<Coin>(
-            createFunc: () => Instantiate(_coinPrefab),
+        _pool = new ObjectPool<Item>(
+            createFunc: () => Instantiate(_prefab),
             actionOnGet: (obj) => ActionOnGet(obj),
             actionOnRelease: (obj) => ActionOnRelease(obj),
             actionOnDestroy: (obj) => Destroy(obj),
@@ -35,22 +37,22 @@ public class Spawner : MonoBehaviour
         _coroutine = StartCoroutine(Spawn());
     }
 
-    private void ActionOnRelease(Coin coin)
+    private void ActionOnRelease(Item item)
     {
-        coin.gameObject.SetActive(false);
+        item.gameObject.SetActive(false);
 
-        _coinCollector.CoinCollected -= Release;
+        _collector.ItemCollected -= Release;
     }
 
-    private void Release(Coin coin)
+    private void Release(Item item)
     {
-        if (coin.gameObject.activeSelf) 
+        if (item.gameObject.activeSelf) 
         {
-            _pool.Release(coin);
+            _pool.Release(item);
         }
     }
     
-    private void GetCoin()
+    private void GetItem()
     {
         _pool.Get();
     }
@@ -61,22 +63,22 @@ public class Spawner : MonoBehaviour
         
         while (_poolCapacity != _poolMaxCapacity)
         {
-            GetCoin();
+            GetItem();
             
             yield return wait;
         }
     }
     
-    private void ActionOnGet(Coin coin)
+    private void ActionOnGet(Item item)
     {
         int firstIndex = 0;
         
         int randomIndex = Random.Range(firstIndex, _spawnPoints.Count);
-        
-        coin.gameObject.transform.position = _spawnPoints[randomIndex].transform.position;
-        
-        coin.gameObject.SetActive(true);
 
-        _coinCollector.CoinCollected += Release;
+        item.gameObject.transform.position = _spawnPoints[randomIndex].transform.position;
+
+        item.gameObject.SetActive(true);
+
+        _collector.ItemCollected += Release;
     }
 }

@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using Random = UnityEngine.Random;
-using Vector2 = System.Numerics.Vector2;
+
 
 public class PlayerDetector : MonoBehaviour
-{
-    private float _distanceToCheck = 5f;
-    
+{   
     public event Action<Player> PlayerDetected;
     public event Action PlayerLost;
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +9,7 @@ using UnityEngine.AI;
 public class Chaser : MonoBehaviour
 {
     [SerializeField] private PlayerDetector _playerDetector;
-    [SerializeField] private float _chaseSpeedMultiplier = 2f;
+    [SerializeField] private float _chaseSpeedMultiplier = 2.5f;
 
     private bool _isChasing = false;
     private Coroutine _coroutine;
@@ -20,16 +21,17 @@ public class Chaser : MonoBehaviour
 
     private void OnEnable()
     {
-        _playerDetector.PlayerDetected += InitiateFollowing;
+        _playerDetector.PlayerDetected += InitiateChase;
         _playerDetector.PlayerLost += StopChase;
     }
 
     private void OnDisable()
     {
-        _playerDetector.PlayerDetected -= InitiateFollowing;
+        _playerDetector.PlayerDetected -= InitiateChase;
+        _playerDetector.PlayerLost -= StopChase;
     }
 
-    private void InitiateFollowing(Player player)
+    private void InitiateChase(Player player)
     {
         _isChasing = true;
         
@@ -40,8 +42,8 @@ public class Chaser : MonoBehaviour
     {
         while (_isChasing)
         {
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, player.transform.position, _chaseSpeedMultiplier * Time.deltaTime);
-            
+            gameObject.transform.position = Vector2.MoveTowards(gameObject.transform.position, new Vector2(player.transform.position.x, gameObject.transform.position.y), _chaseSpeedMultiplier * Time.deltaTime);
+
             yield return null;
         }
     }

@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
     [SerializeField] private JumpController _jumpController;
     [SerializeField] private AnimationController _animationController;
 
+    private float _health = 100f;
+    
     private void Awake()
     {
         _inputReader = GetComponent<InputReader>();

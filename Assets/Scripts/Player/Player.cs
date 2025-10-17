@@ -25,6 +25,7 @@ public class Player : MonoBehaviour, IAttacker
     [SerializeField] private float _damage = 10f;
 
     private float _maxHealth;
+    private int _coinCounter;
 
     private void Awake()
     {
@@ -43,12 +44,12 @@ public class Player : MonoBehaviour, IAttacker
 
     private void OnEnable()
     {
-        _collector.ItemCollected += TryGetHeal;
+        _collector.ItemCollected += IdentifyItem;
     }
 
     private void OnDisable()
     {
-        _collector.ItemCollected -= TryGetHeal;
+        _collector.ItemCollected -= IdentifyItem;
     }
 
     private void FixedUpdate()
@@ -57,22 +58,11 @@ public class Player : MonoBehaviour, IAttacker
         {
             _animationController.PlayRunAnimation(_inputReader.Direction);
             _moveController.Move(_inputReader.Direction);
-            _rotator.Flip(_inputReader.Direction);
+            _rotator.Flip();
         }
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
-    }
-
-    private void TryGetHeal(Item item)
-    {
-        if(item.TryGetComponent(out Medkit medkit))
-        {
-            _health += medkit.Heal();
-
-            if (_health > _maxHealth)
-                _health = _maxHealth;
-        }
     }
 
     public void TakeDamage(float damage)
@@ -100,5 +90,25 @@ public class Player : MonoBehaviour, IAttacker
     public void PushFromEnemy()
     {
         _moveController.Push();
+    }
+
+    private void Heal(Medkit medkit)
+    {
+        _health += medkit.Heal();
+
+        if (_health > _maxHealth)
+            _health = _maxHealth;
+    }
+
+    private void IdentifyItem (Item item)
+    {
+        if(item.TryGetComponent(out Medkit medkit))
+        {
+            Heal(medkit);
+        }
+        else if (item.TryGetComponent(out Coin _))
+        {
+            _coinCounter++;
+        }
     }
 }

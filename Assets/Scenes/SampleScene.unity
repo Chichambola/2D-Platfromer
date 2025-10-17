@@ -123,6 +123,63 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &28808280
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 28808282}
+  - component: {fileID: 28808281}
+  m_Layer: 6
+  m_Name: MedkitSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &28808281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28808280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 930f45492b209c140aa17a3dd6ba4b47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _prefab: {fileID: 6029681070984816532, guid: 380932a003b8cf048917da26d630802d, type: 3}
+  _spawnDelay: 4.58
+  _poolCapacity: 0
+  _poolMaxCapacity: 5
+  _spawnPoints:
+  - {fileID: 862767194}
+  - {fileID: 915401661}
+  - {fileID: 1095020400}
+  - {fileID: 69378704}
+  - {fileID: 1874680675}
+  - {fileID: 939006095}
+  - {fileID: 1859481308}
+  _collector: {fileID: 111458430}
+--- !u!4 &28808282
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28808280}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.092720576, y: -0.1552078, z: 0.04793747}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &69378702
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,6 +298,9 @@ MonoBehaviour:
   _moveController: {fileID: 111458427}
   _jumpController: {fileID: 111458432}
   _animationController: {fileID: 111458433}
+  _collector: {fileID: 111458430}
+  _health: 100
+  _damage: 10
 --- !u!212 &111458423
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -376,7 +436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8be05bb844115246b79de1b5a67c100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 350
+  _moveSpeed: 12.2
   _animator: {fileID: 111458426}
   _rotator: {fileID: 111458431}
   _pushbackForce: 204
@@ -466,8 +526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3d35f5201a509a4ea40c5703e32784b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 10
-  _health: 100
 --- !u!1 &123070117
 GameObject:
   m_ObjectHideFlags: 0
@@ -2036,7 +2094,6 @@ GameObject:
   - component: {fileID: 972874101}
   - component: {fileID: 972874103}
   - component: {fileID: 972874104}
-  - component: {fileID: 972874105}
   - component: {fileID: 972874102}
   - component: {fileID: 972874093}
   m_Layer: 2
@@ -2128,7 +2185,7 @@ Transform:
   m_GameObject: {fileID: 972874088}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.21, y: -0.62, z: 0}
+  m_LocalPosition: {x: 4.43, y: -0.62, z: 0}
   m_LocalScale: {x: 4.240856, y: 4.5713325, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2191,6 +2248,8 @@ MonoBehaviour:
   _edgeDetector: {fileID: 761275965}
   _rotator: {fileID: 972874098}
   _moveController: {fileID: 972874101}
+  _health: 50
+  _damage: 15
 --- !u!114 &972874098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2215,7 +2274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8be05bb844115246b79de1b5a67c100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 150
+  _moveSpeed: 0.24
   _animator: {fileID: 972874089}
   _rotator: {fileID: 972874098}
   _pushbackForce: 0
@@ -2281,20 +2340,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4419fb1640896330098448861342248d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &972874105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 972874088}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3d35f5201a509a4ea40c5703e32784b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _damage: 15
-  _health: 75
 --- !u!1 &1064669801
 GameObject:
   m_ObjectHideFlags: 0
@@ -2814,7 +2859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 930f45492b209c140aa17a3dd6ba4b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _coinPrefab: {fileID: 6204194874714708255, guid: ad6a5c4bfeebe4990a428401615743f9, type: 3}
+  _prefab: {fileID: 6204194874714708255, guid: ad6a5c4bfeebe4990a428401615743f9, type: 3}
   _spawnDelay: 2
   _poolCapacity: 0
   _poolMaxCapacity: 5
@@ -2826,7 +2871,7 @@ MonoBehaviour:
   - {fileID: 1874680675}
   - {fileID: 939006095}
   - {fileID: 1859481308}
-  _coinCollector: {fileID: 111458430}
+  _collector: {fileID: 111458430}
 --- !u!4 &1632877954
 Transform:
   m_ObjectHideFlags: 0
@@ -3333,5 +3378,6 @@ SceneRoots:
   - {fileID: 111458424}
   - {fileID: 972874091}
   - {fileID: 1632877954}
+  - {fileID: 28808282}
   - {fileID: 775971518}
   - {fileID: 439604241}

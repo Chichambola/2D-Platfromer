@@ -23,7 +23,7 @@ public class MoveController : MonoBehaviour
 
     public void Move(float direction)
     {
-        _rigidbody.velocity = new Vector2(direction * Time.fixedDeltaTime * _moveSpeed, _rigidbody.velocity.y);
+        gameObject.transform.Translate(Vector3.right * _moveSpeed * Time.deltaTime);
     }
 
     public void Push()

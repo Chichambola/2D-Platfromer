@@ -5,10 +5,5 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public event Action<Item> PickedUp;
-
-    public void PickUp()
-    {
-        PickedUp?.Invoke(this);
-    }
+    
 }

@@ -58,7 +58,7 @@ public class Player : MonoBehaviour, IAttacker
         {
             _animationController.PlayRunAnimation(_inputReader.Direction);
             _moveController.Move(_inputReader.Direction);
-            _rotator.Flip();
+            _rotator.Flip(_inputReader.Direction);
         }
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)

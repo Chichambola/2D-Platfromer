@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour, IAttacker
     [SerializeField] private EdgeDetector _edgeDetector;
     [SerializeField] private Rotator _rotator;
     [SerializeField] private MoveController _moveController;
-    [SerializeField] private float _health = 50f;
+    [SerializeField] private Health _health;
     [SerializeField] private float _damage = 15f;
 
     private const int MoveLeft = -1;
@@ -20,28 +20,20 @@ public class Enemy : MonoBehaviour, IAttacker
 
     private float _direction = MoveRight;
 
-    private float _maxHealth;
-
     private void Awake()
     {
         _moveController = GetComponent<MoveController>();
-    }
-
-    private void Start()
-    {
-        _maxHealth = _health;
+        _rotator = GetComponent<Rotator>();
     }
 
     private void OnEnable()
     {
         _edgeDetector.OffEdgeDetected += _rotator.Flip;
-        //_edgeDetector.OffEdgeDetected += ChangeDirection;
     }
 
     private void OnDisable()
     {
         _edgeDetector.OffEdgeDetected -= _rotator.Flip;
-        // _edgeDetector.OffEdgeDetected -= ChangeDirection;
     }
 
     private void Update()
@@ -56,25 +48,22 @@ public class Enemy : MonoBehaviour, IAttacker
             player.TakeDamage(_damage);
         }
     }
-    public void TakeDamage(float damage)
-    {
-        _health -= damage;
-
-        Debug.Log($"{gameObject.name} υο - {_health}");
-
-        Die();
-    }
-
+    
     public void DealDamage(IAttacker defender)
     {
         defender.TakeDamage(_damage);
     }
 
+    public void TakeDamage(float damage)
+    {
+        _health.TakeDamage(damage);
+        
+        if (_health.IsAlive == false)
+            Die();
+    }
+
     public void Die()
     {
-        if (_health <= 0)
-        {
-            Destroy(gameObject);
-        }
+        Destroy(gameObject);
     }
 }

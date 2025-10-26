@@ -20,8 +20,8 @@ public class Player : MonoBehaviour, IAttacker
     [SerializeField] private JumpController _jumpController;
     [SerializeField] private AnimationController _animationController;
     [SerializeField] private Collector _collector;
-
-    [SerializeField] private float _health = 100f;
+    [SerializeField] private Health _health;
+    
     [SerializeField] private float _damage = 10f;
 
     private float _maxHealth;
@@ -35,11 +35,6 @@ public class Player : MonoBehaviour, IAttacker
         _jumpController = GetComponent<JumpController>();
         _rotator = GetComponent<Rotator>();
         _animationController = GetComponent<AnimationController>();
-    }
-
-    private void Start()
-    {
-        _maxHealth = _health;
     }
 
     private void OnEnable()
@@ -67,11 +62,10 @@ public class Player : MonoBehaviour, IAttacker
 
     public void TakeDamage(float damage)
     {
-        _health -= damage;
+        _health.TakeDamage(damage);
 
-        Debug.Log($"{gameObject.name} υο - {_health}");
-
-        Die();
+        if (_health.IsAlive == false)
+            Die();
     }
 
     public void DealDamage(IAttacker defender)
@@ -81,10 +75,7 @@ public class Player : MonoBehaviour, IAttacker
 
     public void Die()
     {
-        if (_health <= 0)
-        {
-            Destroy(this);
-        }
+        Destroy(gameObject);
     }
 
     public void PushFromEnemy()
@@ -94,10 +85,7 @@ public class Player : MonoBehaviour, IAttacker
 
     private void Heal(Medkit medkit)
     {
-        _health += medkit.Heal();
-
-        if (_health > _maxHealth)
-            _health = _maxHealth;
+        _health.Heal(medkit.HealAmount); 
     }
 
     private void IdentifyItem (Item item)

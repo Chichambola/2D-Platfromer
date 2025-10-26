@@ -6,9 +6,5 @@ public class Medkit : Item
 {
     [SerializeField] private float _healAmount = 10;
 
-    
-    public float Heal()
-    {
-        return _healAmount;
-    }
+    public float HealAmount => _healAmount;
 }

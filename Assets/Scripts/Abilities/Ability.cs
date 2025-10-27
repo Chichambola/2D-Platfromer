@@ -8,7 +8,7 @@ public abstract class Ability : MonoBehaviour
     [SerializeField] protected float Duration;
     [SerializeField] protected float Cooldown;
 
-    public bool IsActive => DurationCoroutine != null;
+    public bool IsOnCooldown => CooldownCoroutine != null;
     protected float DurationDelay = 1f;
 
     protected Coroutine DurationCoroutine;
@@ -18,6 +18,6 @@ public abstract class Ability : MonoBehaviour
     public abstract void UseAbility();
     
     protected abstract IEnumerator DurationRoutine();
-    
-    protected abstract IEnumerator CooldownRoutine(float currenDuration);
+
+    protected abstract IEnumerator DurationRoutine(float currenDuration);
 }

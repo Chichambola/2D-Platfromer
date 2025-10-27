@@ -36,10 +36,10 @@ public class Vampirism : Ability
 
         StopCoroutine(DurationCoroutine);
 
-        yield return CooldownCoroutine = StartCoroutine(CooldownRoutine(currentDuration));
+        yield return CooldownCoroutine = StartCoroutine(DurationRoutine(currentDuration));
     }
 
-    protected override IEnumerator CooldownRoutine(float currentDuration)
+    protected override IEnumerator DurationRoutine(float currentDuration)
     {
         gameObject.SetActive(false);
 

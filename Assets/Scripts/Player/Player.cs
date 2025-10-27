@@ -61,7 +61,7 @@ public class Player : MonoBehaviour, IAttacker
             _jumpController.Jump();
         
         if(_inputReader.GetIsAbilityButtonPressed() && _ability.IsActive == false)
-            _ability.Use();
+            _ability.UseAbility();
     }
 
     public void TakeDamage(float damage)

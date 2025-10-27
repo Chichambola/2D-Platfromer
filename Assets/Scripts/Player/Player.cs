@@ -21,6 +21,7 @@ public class Player : MonoBehaviour, IAttacker
     [SerializeField] private AnimationController _animationController;
     [SerializeField] private Collector _collector;
     [SerializeField] private Health _health;
+    [SerializeField] private Ability _ability;
     
     [SerializeField] private float _damage = 10f;
 
@@ -58,6 +59,9 @@ public class Player : MonoBehaviour, IAttacker
 
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
+        
+        if(_inputReader.GetIsAbilityButtonPressed() && _ability.IsActive == false)
+            _ability.Use();
     }
 
     public void TakeDamage(float damage)

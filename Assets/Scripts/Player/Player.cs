@@ -60,7 +60,7 @@ public class Player : MonoBehaviour, IAttacker
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
         
-        if(_inputReader.GetIsAbilityButtonPressed() && _ability.IsOnCooldown == false)
+        if(_inputReader.GetIsAbilityButtonPressed() && _ability.IsActive == false)
             _ability.UseAbility();
     }
 

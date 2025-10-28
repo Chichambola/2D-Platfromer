@@ -8,62 +8,64 @@ using Random = UnityEngine.Random;
 public class Vampirism : Ability
 {
     [SerializeField] private float _damage = 1f;
+    [SerializeField] private float _damageRate = 0.5f;
 
     public override void UseAbility()
     {
-        if (DurationCoroutine != null)
-            StopCoroutine(DurationCoroutine);
+        Sprite.enabled = true;
         
-        gameObject.SetActive(true);
-        
-        DurationCoroutine = StartCoroutine(DurationRoutine());
+        DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
     }
     
-    protected override IEnumerator DurationRoutine()
+    protected override IEnumerator DurationRoutine(float duration)
     {
         var wait = new WaitForSeconds(DurationDelay);
-
+        
         float currentDuration = 0;
         
-        while (currentDuration != Duration)
+        while (currentDuration != duration)
         {
             currentDuration += DurationDelay;
 
-            Debug.Log($"Duration: {currentDuration}");
-
+            Debug.Log(currentDuration);
+            
             yield return wait;
         }
-
-        StopCoroutine(DurationCoroutine);
-
-        yield return CooldownCoroutine = StartCoroutine(DurationRoutine(currentDuration));
+        
+        ToggleCoroutines();
+        
+        yield return null;
     }
 
-    protected override IEnumerator DurationRoutine(float currentDuration)
+    private void ToggleCoroutines()
     {
-        gameObject.SetActive(false);
-
-        var wait = new WaitForSeconds(DurationDelay);
-
-        while (currentDuration != 0)
+        if (DurationCoroutine != null)
         {
-            currentDuration -= DurationDelay;
+            Sprite.enabled = false;
+            
+            CooldownCoroutine = StartCoroutine(DurationRoutine(Cooldown));
 
-            Debug.Log($"Cooldown: {currentDuration}");
-
-            yield return wait;
+            StopCoroutine(DurationCoroutine);
+            
+            DurationCoroutine = null;
         }
-
-        StopCoroutine(CooldownCoroutine);
+        else
+        {
+            StopCoroutine(CooldownCoroutine);
+            
+            CooldownCoroutine = null;
+        }
     }
-
+    
     private IEnumerator SuckHealth(Enemy defender)
     {
+        var wait = new WaitForSeconds(_damageRate);
+        
         while(enabled)
         {
             defender.TakeDamage(_damage);
 
-            yield return null;
+            yield return wait;
         }
     }
 

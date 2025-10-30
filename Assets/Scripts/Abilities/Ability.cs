@@ -7,7 +7,7 @@ public abstract class Ability : MonoBehaviour
 {   
     [SerializeField] protected float Duration;
     [SerializeField] protected float Cooldown;
-    [SerializeField] protected SpriteRenderer Sprite;
+    [SerializeField] protected SpriteRenderer RadiusSprite;
     
     protected float DurationDelay = 1f;
     protected Coroutine DurationCoroutine;
@@ -16,7 +16,7 @@ public abstract class Ability : MonoBehaviour
     
     public bool IsActive => DurationCoroutine != null || CooldownCoroutine != null;
 
-    protected void Awake()
+    protected void Start()
     {
         if(DurationCoroutine != null)
             StopCoroutine(DurationCoroutine);

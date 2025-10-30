@@ -87,9 +87,14 @@ public class Player : MonoBehaviour, IAttacker
         _moveController.Push();
     }
 
-    private void Heal(Medkit medkit)
+    public void Heal(Medkit medkit)
     {
         _health.Heal(medkit.HealAmount); 
+    }
+
+    public void Heal(float abilityHeal)
+    {
+        _health.Heal(abilityHeal); 
     }
 
     private void IdentifyItem (Item item)

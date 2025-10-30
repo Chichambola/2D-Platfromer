@@ -10,38 +10,48 @@ using UnityEngine;
 public class Vampirism : Ability
 {
     [SerializeField] private float _damage = 5f;
-    [SerializeField] private float _damageRate = 0.5f;
+    [SerializeField] private float _damageRate = 0.1f;
 
     public override event Action<float, float> ValuesChanged;
 
     public override void UseAbility()
     {
-        DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
+        StartCoroutine(PlayAbility());
+    }
+
+    private IEnumerator PlayAbility()
+    {
+        ToggleActive();
 
         RadiusSprite.enabled = true;
+
+        AbilityCoroutine = StartCoroutine(LookForEnemy());
+        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
+
+        RadiusSprite.enabled = false;
+        StopCoroutine(AbilityCoroutine);
+
+        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Cooldown));
+
+        StopCoroutine(DurationCoroutine);
+
+        ToggleActive();
     }
 
     protected override IEnumerator DurationRoutine(float duration)
     {
         var wait = new WaitForSeconds(DurationDelay);
 
-        float currentDuration = 0;
-
-        while (currentDuration != duration)
+        while (CurrentDuration != duration)
         {
-            if (DurationCoroutine != null && AbilityCoroutine == null)
-            {
-                AbilityCoroutine = StartCoroutine(LookForEnemy());
-            }
+            CurrentDuration += DurationDelay;
 
-            currentDuration += DurationDelay;
-
-            ValuesChanged?.Invoke(currentDuration, duration);
+            ValuesChanged?.Invoke(CurrentDuration, duration);
 
             yield return wait;
         }
 
-        ToggleDurationCoroutines();
+        CurrentDuration = 0;
     }
 
     private IEnumerator LookForEnemy()
@@ -50,7 +60,7 @@ public class Vampirism : Ability
 
         float radius = RadiusSprite.bounds.extents.x;
 
-        while (DurationCoroutine != null)
+        while (enabled)
         {
             Collider2D[] hits = Physics2D.OverlapCircleAll(gameObject.transform.position, radius);
 
@@ -64,8 +74,6 @@ public class Vampirism : Ability
 
             yield return wait;
         }
-
-        AbilityCoroutine = TurnOffCoroutine(AbilityCoroutine);
     }
 
     private void SuckHealth(Enemy defender)
@@ -76,28 +84,5 @@ public class Vampirism : Ability
 
             player.Heal(_damage);
         }
-    }
-
-    private void ToggleDurationCoroutines()
-    {
-        if (DurationCoroutine != null)
-        {
-            RadiusSprite.enabled = false;
-
-            DurationCoroutine = TurnOffCoroutine(DurationCoroutine);
-
-            CooldownCoroutine = StartCoroutine(DurationRoutine(Cooldown));
-        }
-        else
-        {
-            CooldownCoroutine = TurnOffCoroutine(CooldownCoroutine);
-        }
-    }
-
-    private Coroutine TurnOffCoroutine(Coroutine coroutine)
-    {
-        StopCoroutine(coroutine);
-
-        return null;
     }
 }

@@ -10,21 +10,20 @@ public abstract class Ability : MonoBehaviour
     [SerializeField] protected SpriteRenderer RadiusSprite;
     
     protected float DurationDelay = 1f;
+    protected float CurrentDuration;
     protected Coroutine DurationCoroutine;
-    protected Coroutine CooldownCoroutine;
     protected Coroutine AbilityCoroutine;
 
     public abstract event Action<float, float> ValuesChanged;
     
-    public bool IsActive => DurationCoroutine != null || CooldownCoroutine != null;
+    public bool IsActive { get; private set; }
 
     protected void Start()
     {
+        IsActive = false;
+
         if(DurationCoroutine != null)
             StopCoroutine(DurationCoroutine);
-        
-        if(CooldownCoroutine != null)
-            StopCoroutine(CooldownCoroutine);
         
         if (AbilityCoroutine != null)
             StopCoroutine(AbilityCoroutine);
@@ -32,5 +31,13 @@ public abstract class Ability : MonoBehaviour
 
     public abstract void UseAbility();
     
+    protected void ToggleActive()
+    {
+        if (IsActive)
+            IsActive = false;
+        else 
+            IsActive = true;
+    }
+
     protected abstract IEnumerator DurationRoutine(float duration);
 }

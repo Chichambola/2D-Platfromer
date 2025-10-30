@@ -13,6 +13,8 @@ public abstract class Ability : MonoBehaviour
     protected Coroutine DurationCoroutine;
     protected Coroutine CooldownCoroutine;
     protected Coroutine AbilityCoroutine;
+
+    public abstract event Action<float, float> ValuesChanged;
     
     public bool IsActive => DurationCoroutine != null || CooldownCoroutine != null;
 

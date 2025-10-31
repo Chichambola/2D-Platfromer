@@ -13,29 +13,11 @@ public class Vampirism : Ability
     [SerializeField] private float _damageRate = 0.1f;
 
     public override event Action<float, float> ValuesChanged;
+    public event Action<float> HealthStolen;
 
     public override void UseAbility()
     {
-        StartCoroutine(PlayAbility());
-    }
-
-    private IEnumerator PlayAbility()
-    {
-        ToggleActive();
-
-        RadiusSprite.enabled = true;
-
-        AbilityCoroutine = StartCoroutine(LookForEnemy());
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
-
-        RadiusSprite.enabled = false;
-        StopCoroutine(AbilityCoroutine);
-
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Cooldown));
-
-        StopCoroutine(DurationCoroutine);
-
-        ToggleActive();
+        StartCoroutine(PlayCoroutines());
     }
 
     protected override IEnumerator DurationRoutine(float duration)
@@ -54,22 +36,59 @@ public class Vampirism : Ability
         CurrentDuration = 0;
     }
 
+    private IEnumerator PlayCoroutines()
+    {
+        ChangeActiveState();
+
+        Sprite.enabled = true;
+
+        Coroutine = StartCoroutine(LookForEnemy());
+
+        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
+
+        Sprite.enabled = false;
+
+        StopCoroutine(Coroutine);
+
+        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Cooldown));
+
+        StopCoroutine(DurationCoroutine);
+
+        ChangeActiveState();
+    }
+
     private IEnumerator LookForEnemy()
     {
         var wait = new WaitForSeconds(_damageRate);
 
-        float radius = RadiusSprite.bounds.extents.x;
+        float radius = Sprite.bounds.extents.x;
 
         while (enabled)
         {
             Collider2D[] hits = Physics2D.OverlapCircleAll(gameObject.transform.position, radius);
 
+            float nearestDistance = float.MaxValue;
+
+            Enemy nearestEnemy = null;
+
             foreach (Collider2D collider in hits)
             {
                 if (collider.TryGetComponent(out Enemy enemy))
                 {
-                    SuckHealth(enemy);
+                    float distance = Vector2.Distance(gameObject.transform.position, collider.transform.position);
+
+                    if (distance < nearestDistance)
+                    {
+                        nearestDistance = distance;
+
+                        nearestEnemy = enemy;
+                    }
                 }
+            }
+
+            if (nearestEnemy != null)
+            {
+                SuckHealth(nearestEnemy);
             }
 
             yield return wait;
@@ -78,11 +97,8 @@ public class Vampirism : Ability
 
     private void SuckHealth(Enemy defender)
     {
-        if (gameObject.TryGetComponent(out Player player))
-        {
-            defender.TakeDamage(_damage);
+        defender.TakeDamage(_damage);
 
-            player.Heal(_damage);
-        }
+        HealthStolen?.Invoke(_damage);
     }
 }

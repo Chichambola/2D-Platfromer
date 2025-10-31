@@ -7,31 +7,31 @@ public abstract class Ability : MonoBehaviour
 {   
     [SerializeField] protected float Duration;
     [SerializeField] protected float Cooldown;
-    [SerializeField] protected SpriteRenderer RadiusSprite;
+    [SerializeField] protected SpriteRenderer Sprite;
     
     protected float DurationDelay = 1f;
     protected float CurrentDuration;
     protected Coroutine DurationCoroutine;
-    protected Coroutine AbilityCoroutine;
+    protected Coroutine Coroutine;
 
     public abstract event Action<float, float> ValuesChanged;
     
     public bool IsActive { get; private set; }
 
-    protected void Start()
+    private void Start()
     {
         IsActive = false;
 
         if(DurationCoroutine != null)
             StopCoroutine(DurationCoroutine);
         
-        if (AbilityCoroutine != null)
-            StopCoroutine(AbilityCoroutine);
+        if (Coroutine != null)
+            StopCoroutine(Coroutine);
     }
 
     public abstract void UseAbility();
     
-    protected void ToggleActive()
+    protected void ChangeActiveState()
     {
         if (IsActive)
             IsActive = false;

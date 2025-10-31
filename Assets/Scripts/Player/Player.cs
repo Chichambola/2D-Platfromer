@@ -21,7 +21,8 @@ public class Player : MonoBehaviour, IAttacker
     [SerializeField] private AnimationController _animationController;
     [SerializeField] private Collector _collector;
     [SerializeField] private Health _health;
-    [SerializeField] private Ability _ability;
+    [SerializeField] private Vampirism _vampirism;
+    [SerializeField] private Gun _gun;
     
     [SerializeField] private float _damage = 10f;
 
@@ -41,11 +42,13 @@ public class Player : MonoBehaviour, IAttacker
     private void OnEnable()
     {
         _collector.ItemCollected += IdentifyItem;
+        _vampirism.HealthStolen += Heal;
     }
 
     private void OnDisable()
     {
         _collector.ItemCollected -= IdentifyItem;
+        _vampirism.HealthStolen -= Heal;
     }
 
     private void FixedUpdate()
@@ -60,8 +63,11 @@ public class Player : MonoBehaviour, IAttacker
         if (_inputReader.GetIsJump() && _groundDetector.IsGround)
             _jumpController.Jump();
         
-        if(_inputReader.GetIsAbilityButtonPressed() && _ability.IsActive == false)
-            _ability.UseAbility();
+        if(_inputReader.GetIsVampirismButtonPressed() && _vampirism.IsActive == false)
+            _vampirism.UseAbility();
+
+        if(_inputReader.GetIsGunButtonPressed() && _gun.IsActive == false)
+            _gun.UseAbility();
     }
 
     public void TakeDamage(float damage)

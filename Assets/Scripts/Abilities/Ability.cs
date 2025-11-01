@@ -8,6 +8,7 @@ public abstract class Ability : MonoBehaviour
     [SerializeField] protected float Duration;
     [SerializeField] protected float Cooldown;
     [SerializeField] protected SpriteRenderer Sprite;
+    [SerializeField] protected Finder Finder;
     
     protected float DurationDelay = 1f;
     protected float CurrentDuration;
@@ -15,6 +16,8 @@ public abstract class Ability : MonoBehaviour
     protected Coroutine Coroutine;
 
     public abstract event Action<float, float> ValuesChanged;
+    public abstract event Action<float> DurationStarted;
+    public abstract event Action DurationCompleted;
     
     public bool IsActive { get; private set; }
 
@@ -24,10 +27,10 @@ public abstract class Ability : MonoBehaviour
 
         if(DurationCoroutine != null)
             StopCoroutine(DurationCoroutine);
-        
-        if (Coroutine != null)
-            StopCoroutine(Coroutine);
     }
+
+    protected abstract void OnEnable();
+    protected abstract void OnDisable();
 
     public abstract void UseAbility();
     

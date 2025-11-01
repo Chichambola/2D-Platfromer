@@ -10,14 +10,25 @@ using UnityEngine;
 public class Vampirism : Ability
 {
     [SerializeField] private float _damage = 5f;
-    [SerializeField] private float _damageRate = 0.1f;
 
     public override event Action<float, float> ValuesChanged;
+    public override event Action DurationCompleted;
+    public override event Action<float> DurationStarted;
     public event Action<float> HealthStolen;
+
+    protected override void OnEnable()
+    {
+        Finder.EnemyFound += SuckHealth;
+    }
+
+    protected override void OnDisable()
+    {
+        Finder.EnemyFound += SuckHealth;
+    }
 
     public override void UseAbility()
     {
-        StartCoroutine(PlayCoroutines());
+        Coroutine = StartCoroutine(PlayCoroutines());
     }
 
     protected override IEnumerator DurationRoutine(float duration)
@@ -40,59 +51,21 @@ public class Vampirism : Ability
     {
         ChangeActiveState();
 
+        DurationStarted?.Invoke(Sprite.bounds.extents.x);
+
         Sprite.enabled = true;
 
-        Coroutine = StartCoroutine(LookForEnemy());
+        yield return DurationRoutine(Duration);
 
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
+        DurationCompleted?.Invoke();
 
         Sprite.enabled = false;
 
+        yield return DurationRoutine(Cooldown);
+
         StopCoroutine(Coroutine);
 
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Cooldown));
-
-        StopCoroutine(DurationCoroutine);
-
         ChangeActiveState();
-    }
-
-    private IEnumerator LookForEnemy()
-    {
-        var wait = new WaitForSeconds(_damageRate);
-
-        float radius = Sprite.bounds.extents.x;
-
-        while (enabled)
-        {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(gameObject.transform.position, radius);
-
-            float nearestDistance = float.MaxValue;
-
-            Enemy nearestEnemy = null;
-
-            foreach (Collider2D collider in hits)
-            {
-                if (collider.TryGetComponent(out Enemy enemy))
-                {
-                    float distance = Vector2.Distance(gameObject.transform.position, collider.transform.position);
-
-                    if (distance < nearestDistance)
-                    {
-                        nearestDistance = distance;
-
-                        nearestEnemy = enemy;
-                    }
-                }
-            }
-
-            if (nearestEnemy != null)
-            {
-                SuckHealth(nearestEnemy);
-            }
-
-            yield return wait;
-        }
     }
 
     private void SuckHealth(Enemy defender)

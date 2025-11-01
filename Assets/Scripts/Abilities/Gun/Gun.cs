@@ -6,15 +6,26 @@ using UnityEngine;
 
 public class Gun : Ability
 {
-    [SerializeField] private float _lookForRate = 0.5f;
-    [SerializeField] private float _lookForRadius = 15f;
     [SerializeField] private Bullet _bullet;
+    [SerializeField] private float _lookForRadius = 15f;
 
     public override event Action<float, float> ValuesChanged;
+    public override event Action<float> DurationStarted;
+    public override event Action DurationCompleted;
+
+    protected override void OnEnable()
+    {
+        Finder.EnemyFound += ShootBullet;
+    }
+
+    protected override void OnDisable()
+    {
+        Finder.EnemyFound += ShootBullet;
+    }
 
     public override void UseAbility()
     {
-        StartCoroutine(PlayCoroutines());
+        Coroutine = StartCoroutine(PlayCoroutines());
     }
 
     protected override IEnumerator DurationRoutine(float duration)
@@ -37,53 +48,21 @@ public class Gun : Ability
     {
         ChangeActiveState();
 
-        Coroutine = StartCoroutine(LookForEnemy());
+        DurationStarted?.Invoke(_lookForRadius);
 
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Duration));
+        Sprite.enabled = true;
+
+        yield return DurationRoutine(Duration);
+
+        DurationCompleted?.Invoke();
+
+        Sprite.enabled = false;
+
+        yield return DurationRoutine(Cooldown);
 
         StopCoroutine(Coroutine);
 
-        yield return DurationCoroutine = StartCoroutine(DurationRoutine(Cooldown));
-
-        StopCoroutine(DurationCoroutine);
-
         ChangeActiveState();
-    }
-
-    private IEnumerator LookForEnemy()
-    {
-        var wait = new WaitForSeconds(_lookForRate);
-
-        while (enabled)
-        {
-            Collider2D[] hits = Physics2D.OverlapCircleAll(gameObject.transform.position, _lookForRadius);
-
-            float nearestDistance = float.MaxValue;
-
-            Enemy nearestEnemy = null;
-
-            foreach (Collider2D collider in hits)
-            {
-                if (collider.TryGetComponent(out Enemy enemy))
-                {
-                    float distance = Vector2.Distance(gameObject.transform.position, collider.transform.position);
-
-                    if (distance < nearestDistance)
-                    {
-                        nearestDistance = distance;
-
-                        nearestEnemy = enemy;
-                    }
-                }
-            }
-
-            if (nearestEnemy != null)
-            {
-                ShootBullet(nearestEnemy);
-            }
-
-            yield return wait;
-        }
     }
 
     private void ShootBullet(Enemy enemy)

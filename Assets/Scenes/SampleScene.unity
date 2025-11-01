@@ -2457,7 +2457,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.39, y: 1.3900001, z: 1.39}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1387597957}
   m_Father: {fileID: 111458424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &464452739
@@ -2527,8 +2528,8 @@ MonoBehaviour:
   Duration: 6
   Cooldown: 4
   Sprite: {fileID: 464452739}
+  Finder: {fileID: 1387597958}
   _damage: 1
-  _damageRate: 0.1
 --- !u!58 &464452742
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -3708,7 +3709,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.39, y: 1.3900001, z: 1.39}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1632836293}
   m_Father: {fileID: 111458424}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &995477546
@@ -3778,9 +3780,9 @@ MonoBehaviour:
   Duration: 5
   Cooldown: 2
   Sprite: {fileID: 2174402845237632169, guid: e9001d43742a6c547a1b5b3ea7716fde, type: 3}
-  _lookForRate: 0.5
-  _lookForRadius: 15
+  Finder: {fileID: 1632836294}
   _bullet: {fileID: 2915895482837472722, guid: e9001d43742a6c547a1b5b3ea7716fde, type: 3}
+  _lookForRadius: 15
 --- !u!1 &1044574947
 GameObject:
   m_ObjectHideFlags: 0
@@ -4401,6 +4403,52 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &1387597956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1387597957}
+  - component: {fileID: 1387597958}
+  m_Layer: 7
+  m_Name: Finder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1387597957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387597956}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 464452738}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1387597958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1387597956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3922600e2d30944a807364143bb0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fireRate: 0.1
+  _ability: {fileID: 464452741}
 --- !u!1 &1410427076
 GameObject:
   m_ObjectHideFlags: 0
@@ -4871,6 +4919,52 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &1632836292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1632836293}
+  - component: {fileID: 1632836294}
+  m_Layer: 7
+  m_Name: Finder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1632836293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632836292}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 995477545}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1632836294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632836292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b3922600e2d30944a807364143bb0d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fireRate: 0.28
+  _ability: {fileID: 995477547}
 --- !u!1 &1632877952
 GameObject:
   m_ObjectHideFlags: 0
